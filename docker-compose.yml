@@ -1,8 +1,61 @@
 version: "3"
 services:
-  app:
+  authlete:
+    container_name: authlete
     build: .
-    ports:
-      - 8080:8080
+    # ports:
+    #   - 8080:8080
     volumes:
       - .:/authlete/app
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/html/:/usr/share/nginx/html/
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/certs/:/etc/ipax/certs/
+    networks:
+      default:
+        aliases:
+          - idp-localhost.sherpa-demo.com
+    depends_on:
+      authlete:
+        condition: service_started
+      demoapp1:
+        condition: service_started
+
+  demoapp1:
+    container_name: demoapp1
+    image: ghcr.io/identicum/ipax:latest
+    pull_policy: always
+    restart: always
+    environment:
+      NGINX_RESOLVER: 127.0.0.11 valid=5s
+      NGINX_LOG_LEVEL: debug
+      OIDC_DISCOVERY: https://idp-localhost.sherpa-demo.com/.well-known/openid-configuration
+      OIDC_CLIENT_ID: 214324345132735
+      OIDC_CLIENT_SECRET: 6HvOYzlYARjvUSwMbS4kpUkk35XMjAU70AEXEFs5TZHy6ena9i8XZBANgir1JOmLqlGHVdTOQCfUrxWzzmyEOQ
+      OIDC_SCOPE: openid profile
+      OIDC_POST_LOGOUT_REDIRECT_URI: http://demoapp1/logoutSuccess.html
+
+  demoapp2:
+    container_name: demoapp2
+    image: ghcr.io/identicum/ipax:latest
+    pull_policy: always
+    restart: always
+    environment:
+      NGINX_RESOLVER: 127.0.0.11 valid=5s
+      NGINX_LOG_LEVEL: debug
+      OIDC_DISCOVERY: https://idp-localhost.sherpa-demo.com/.well-known/openid-configuration
+      OIDC_CLIENT_ID: 214333638093377
+      OIDC_CLIENT_SECRET: dVNi45m5ovsbm0w2T38rBogpJxbndwLCOgI7Z33sBb92boJF7h_olYoXbjHQ5s0J_60DmAdq--e9tOLoFxGxrw
+      OIDC_SCOPE: openid profile
+      OIDC_POST_LOGOUT_REDIRECT_URI: http://demoapp2/logoutSuccess.html
+      
+    
+

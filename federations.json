@@ -4,14 +4,16 @@
       "id": "okta",
       "server": {
         "name": "Okta-hosted IdP",
-        "issuer": "https://YOUR_COMPANY.okta.com"
+        "issuer": "https://trial-5136690.okta.com"
       },
       "client": {
-        "clientId": "YOUR_CLIENT_ID",
-        "clientSecret": "YOUR_CLIENT_SECRET",
+        "clientId": "0oah4mq9b3ZaURQWh697",
+        "clientSecret": "iokJkqWecQVbzN-W2tzhFAZr94EqIRKAufdaqOLUYVauYQCQ-Toj8go8PMOEEhAG",
         "redirectUri": "http://localhost:8080/api/federation/callback/okta",
         "idTokenSignedResponseAlg": "RS256"
       }
     }
   ]
 }
+
+

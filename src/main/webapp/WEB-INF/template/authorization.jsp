@@ -64,7 +64,7 @@
     <c:if test="${model.scopes != null}">
     <h4 id="permissions">Permissions</h4>
     <div class="indent">
-      <p>The application is requesting the following permissions.</p>
+      <p>AUTENTICATEEEE</p>
 
       <dl id="scope-list">
         <c:forEach var="scope" items="${model.scopes}">
